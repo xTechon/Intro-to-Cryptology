@@ -1,5 +1,40 @@
-\documentclass[a4paper]{article}
+\documentclass[11pt]{article}
+\input{../macros.tex}
+\usepackage{url}
 
+\newcommand{\bitsoracle}{{\mathsf{Bits}}}
+\newcommand{\indcpa}{{\mathrm{IND}\mbox{-}\mathrm{CPA}}}
+\newcommand{\indrcpa}{{\mathrm{IND}\$\mbox{-}\mathrm{CPA}}}
+\newcommand{\Func}{\mathsf{Func}}
+%\newcommand{\Perm}{\mathsf{Perm}}
+\newcommand{\Prob}[1]{\Pr\left[#1\right]}
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\thatis}{i.e. }
+\newcommand{\forexample}{e.g. }
+ 
+%\newcommand{\Adv}{\mathrm{Adv}}
+\newcommand{\ExpPRF}[2]{\mathsf{Exp}^{\mathrm{prf}}_{#1}{(#2)}}
+\newcommand{\AdvPRF}[2]{\Adv^{\mathrm{prf}}_{#1}(#2)}
+\newcommand{\ExpVP}[2]{\mathsf{Exp}^{\mathrm{vp}}_{#1}{(#2)}}
+\newcommand{\AdvVP}[2]{\Adv^{\mathrm{vp}}_{#1}(#2)}
+\newcommand{\ExpPRP}[2]{\mathsf{Exp}^{\mathrm{prp}}_{#1}{(#2)}}
+\newcommand{\AdvPRP}[2]{\Adv^{\mathrm{prp}}_{#1}(#2)}
+\newcommand{\ExpGuess}[2]{\mathsf{Exp}^{\mathrm{guess}}_{#1}{(#2)}}
+\newcommand{\AdvGuess}[2]{\Adv^{\mathrm{guess}}_{#1}(#2)}
+\newcommand{\ExpKR}[2]{\mathsf{Exp}^{\mathrm{kr-ic}}_{#1}{(#2)}}
+\newcommand{\AdvKR}[2]{\Adv^{\mathrm{kr}}_{#1}(#2)}
+
+\newcommand{\calV}{\mathcal{V}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{{\bf  Introduction to Modern Cryptography}\\ Problem Set 1 \\[2ex] }
+\author{Daniel Hiromoto}
 \begin{document}
-  Hello, World! this is very cool! epic
+  \maketitle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \thispagestyle{empty}
+  
+  \begin{theorem}
+    Fix integers $n,k>0$ and Let $F\colon\bits^k \times \bits^n \to \bits^n$ be a blockcipher.  
+  \end{theorem}
 \end{document}
