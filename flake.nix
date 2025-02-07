@@ -11,7 +11,7 @@
       let
         pkgs = import nixpkgs {inherit system; config.allowUnfree = true; };
         tex = pkgs.texlive.combine {
-          inherit (pkgs.texlive) scheme-small latex-bin latexmk texcount;
+          inherit (pkgs.texlive) scheme-small latex-bin latexmk texcount setspace url;
         };
         extensions = nix-vscode-extensions.extensions.${system};
 
