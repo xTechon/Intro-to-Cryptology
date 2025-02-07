@@ -38,6 +38,7 @@
           ];
           shellHook = ''
             export LABEL="HW1"
+            alias code="codium Intro-to-Cryptology.code-workspace"
           '';
         };
 
