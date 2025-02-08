@@ -54,8 +54,9 @@
               export PATH="${pkgs.lib.makeBinPath buildInputs}";
               mkdir -p .cache/texmf-var
               env TEXMFHOME=.cache TEXMFVAR=.cache/texmf-var \
-                latexmk -interaction=nonstopmode -pdf -lualatex \
-                HW1/HW1.tex
+                latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -lualatex \
+                HW1/HW1.tex \
+                macros.tex
             '';
             installPhase = ''
               mkdir -p $out
