@@ -1,6 +1,8 @@
 \documentclass[11pt]{article}
 \input{../macros.tex}
 \usepackage{url}
+\usepackage{amsmath} 
+%\usepackage{algpseudocode}
 
 \newcommand{\bitsoracle}{{\mathsf{Bits}}}
 \newcommand{\indcpa}{{\mathrm{IND}\mbox{-}\mathrm{CPA}}}
@@ -34,7 +36,100 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \thispagestyle{empty}
   
-  \begin{theorem}
-    Fix integers $n,k>0$ and Let $F\colon\bits^k \times \bits^n \to \bits^n$ be a blockcipher.  
-  \end{theorem}
+\begin{theorem}  Fix integers $n,k>0$ and Let $F\colon\bits^k \times \bits^n \to \bits^n$ be a blockcipher.  Define $E\colon \bits^{n+k} \times \bits^n \to \bits^n$ as $E_{K2 \concat K1}(X) = F_{K1}(X) \xor K2$.  Let~$A$ be a PRP-adversary (for attacking~$E$) that has time complexity~$t$ and asks at most~$q$ oracle queries.  Then there exists an adversary~$B$, explicitly given in the proof of this theorem, such that
+  \begin{equation}
+     \AdvPRP{E}{A} \leq \AdvPRP{F}{B} + \frac{1}{2^{n}!}
+  \end{equation}
+and where~$B$ has time complexity $t'=t + "negligable"$ and asks $q'=q+2$ queries. \hfill$\diamondsuit$
+\end{theorem}
+
+\paragraph{Proof} Let's define a notion where $k = n$ and create a function family 
+$E\colon\bits^{2n}\times\bits^n \to \bits^n$ for some ideal cipher model with some experiment using adversary~$A$ (\figref{fig:eks}).
+We can then create a new notion (\figref{fig:eprp}) as a superset of \figref{fig:eks} for some bit guessing game with adversary~$B$. The advantage then, of adversary~$B$ would be:
+\[
+  \AdvPRP{F}{B} = 2 \times \Pr[\ExpPRP{F}{B} = 1] - 1
+\]
+
+The $\Pr[\ExpPRP{F}{B} = 1]$ can then be expanded as:
+\begin{equation}
+  \begin{aligned}
+  \Pr[\ExpPRP{F}{B} = 1] 
+                        & = \Pr(b = 1) \times \Pr[\ExpPRP{F}{B} = 1 \vert b = 1]  \\
+                        & + \Pr(b = 0) \times \Pr[\ExpPRP{F}{B} = 1 \vert b = 0] \\
+                        \\
+                        & = \frac{1}{2} \times \Pr[\ExpPRP{F}{B} = 1 \vert b = 1]  \\
+                        & + \frac{1}{2} \times \Pr[\ExpPRP{F}{B} = 1 \vert b = 0] 
+  \end{aligned}
+\end{equation}
+
+If we define adversary~$B$ as (\textrm{???})
+
+
+\begin{figure}[t]
+\center
+\fpage{.7}{
+\hpagess{.6}{.45}
+{
+\experimentv{$\ExpKR{E}{A}$:}\\
+$K \getsr \bits^{2n}$\\
+$F \getsr \mathsf{BC}(n,n)$\\
+$K' \getsr A^{\calO(\cdot),\mathrm{IC}(\cdot,\cdot)}$\\
+Ret $[K'=K]$\\
+}
+{
+\oraclev{$\calO(X)$}\\
+Ret $E_K(X)$\\
+
+\oraclev{$\mathrm{IC}(L,X)$}\\
+Ret $F_L(X)$
+}
+}
+\caption{The key-recovery notion for function family $E\colon\bits^{2n}\times\bits^n \to \bits^n$, in the ideal cipher model for some (related) blockcipher~$F$.  In the current problem, $E$ is specifically defined as $E_{K2\concat K1}(X)=F_{K1}(X)\xor K2$, so a single call $\calO(X)$ effectively determines one value of the table for $F_{K1}$, in the lazy-sampling sense. (But \emph{only} for that specific table, not any of the other $F_{K1'}$ tables for $K1' \neq K1$.)}
+\label{fig:eks}
+\end{figure}
+
+\begin{figure}[t]
+\center
+\fpage{.7}{
+\hpagess{.6}{.45}
+{
+\experimentv{$\ExpPRP{F}{B}$:}\\
+$b \getsr \bits$ \\
+$L \getsr \bits^{k}$\\
+$V \getsr \bits^{n}$\\
+$ \pi \getsr \mathsf{perm}(n)$\\
+$L' \getsr B^{\calO(\cdot),\mathrm{F_L}(\cdot)}$\\
+Ret $[L'=L]$\\
+}
+{
+\oraclev{$\calO(Y)$}\\
+if $ b = 1 $\\
+  then $Y \leftarrow E_{V \Vert L}(X)$ \\
+  else $Y \leftarrow \pi(x) \xor V$\\
+Ret $Y$\\
+
+\oraclev{$\mathrm{F_L}(Y)$}\\
+if $ b = 1 $\\
+  then $Y \leftarrow F_L(X)$\\
+  else $Y \leftarrow \pi(X)$\\
+Ret $Y$
+}
+}
+\caption{The Bit-Guessing Game notion for function family $E\colon\bits^{k+n}\times\bits^n \to \bits^n$, in the ideal cipher model for some (related) blockcipher~$F$.  
+In the current problem, $E$ is specifically defined as $E_{V\concat L}(X)=F_{L}(X)\xor V$, so a single call $\calO(Y)$ effectively determines one value of the table for $F_{L}$ which may be from a PRP, in the lazy-sampling sense. 
+(But \emph{only} for that specific table, not any of the other $F_{L'}$ tables for $L' \neq L$.)}
+\label{fig:eprp}
+\end{figure}
+
+\begin{figure}[t]
+  \adversaryv{B} \\
+  Run $A$. \\
+  When $A$ querries X: \\
+     $Y \leftarrow O(X)$ \\
+     Ret Y to A
+  
+\end{figure}
+
+
 \end{document}
+
