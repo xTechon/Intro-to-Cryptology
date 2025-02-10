@@ -1,8 +1,9 @@
 \documentclass[11pt]{article}
-\input{../macros.tex}
 \usepackage{url}
 \usepackage{amsmath} 
-%\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{algpseudocodex}
+\input{../macros.tex}
 
 \newcommand{\bitsoracle}{{\mathsf{Bits}}}
 \newcommand{\indcpa}{{\mathrm{IND}\mbox{-}\mathrm{CPA}}}
@@ -16,16 +17,16 @@
  
 %\newcommand{\Adv}{\mathrm{Adv}}
 \newcommand{\ExpPRF}[2]{\mathsf{Exp}^{\mathrm{prf}}_{#1}{(#2)}}
-\newcommand{\AdvPRF}[2]{\Adv^{\mathrm{prf}}_{#1}(#2)}
+\newcommand{\AdvPRF}[2]{\Adv^{\mathrm{prf}}_{#1} (#2)}
 \newcommand{\ExpVP}[2]{\mathsf{Exp}^{\mathrm{vp}}_{#1}{(#2)}}
-\newcommand{\AdvVP}[2]{\Adv^{\mathrm{vp}}_{#1}(#2)}
+\newcommand{\AdvVP}[2]{\Adv^{\mathrm{vp}}_{#1} (#2)}
 \newcommand{\ExpPRP}[2]{\mathsf{Exp}^{\mathrm{prp}}_{#1}{(#2)}}
-\newcommand{\AdvPRP}[2]{\Adv^{\mathrm{prp}}_{#1}(#2)}
+\newcommand{\AdvPRP}[2]{\Adv^{\mathrm{prp}}_{#1} (#2)}
 \newcommand{\ExpGuess}[2]{\mathsf{Exp}^{\mathrm{guess}}_{#1}{(#2)}}
-\newcommand{\AdvGuess}[2]{\Adv^{\mathrm{guess}}_{#1}(#2)}
+\newcommand{\AdvGuess}[2]{\Adv^{\mathrm{guess}}_{#1} (#2)}
 \newcommand{\ExpKR}[2]{\mathsf{Exp}^{\mathrm{kr-ic}}_{#1}{(#2)}}
-\newcommand{\AdvKR}[2]{\Adv^{\mathrm{kr}}_{#1}(#2)}
-
+\newcommand{\AdvKR}[2]{\Adv^{\mathrm{kr}}_{#1} (#2)}
+%
 \newcommand{\calV}{\mathcal{V}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -35,38 +36,22 @@
   \maketitle
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \thispagestyle{empty}
+
+  \pagebreak{}
   
 \begin{theorem}  Fix integers $n,k>0$ and Let $F\colon\bits^k \times \bits^n \to \bits^n$ be a blockcipher.  Define $E\colon \bits^{n+k} \times \bits^n \to \bits^n$ as $E_{K2 \concat K1}(X) = F_{K1}(X) \xor K2$.  Let~$A$ be a PRP-adversary (for attacking~$E$) that has time complexity~$t$ and asks at most~$q$ oracle queries.  Then there exists an adversary~$B$, explicitly given in the proof of this theorem, such that
   \begin{equation}
      \AdvPRP{E}{A} \leq \AdvPRP{F}{B} + \frac{1}{2^{n}!}
   \end{equation}
-and where~$B$ has time complexity $t'=t + "negligable"$ and asks $q'=q+2$ queries. \hfill$\diamondsuit$
+and where~$B$ has time complexity $t'=t + `negligable`$ and asks $q'=q+2$ queries. \hfill$\diamondsuit$
 \end{theorem}
 
-\paragraph{Proof} Let's define a notion where $k = n$ and create a function family 
-$E\colon\bits^{2n}\times\bits^n \to \bits^n$ for some ideal cipher model with some experiment using adversary~$A$ (\figref{fig:eks}).
-We can then create a new notion (\figref{fig:eprp}) as a superset of \figref{fig:eks} for some bit guessing game with adversary~$B$. The advantage then, of adversary~$B$ would be:
-\[
-  \AdvPRP{F}{B} = 2 \times \Pr[\ExpPRP{F}{B} = 1] - 1
-\]
 
-The $\Pr[\ExpPRP{F}{B} = 1]$ can then be expanded as:
-\begin{equation}
-  \begin{aligned}
-  \Pr[\ExpPRP{F}{B} = 1] 
-                        & = \Pr(b = 1) \times \Pr[\ExpPRP{F}{B} = 1 \vert b = 1]  \\
-                        & + \Pr(b = 0) \times \Pr[\ExpPRP{F}{B} = 1 \vert b = 0] \\
-                        \\
-                        & = \frac{1}{2} \times \Pr[\ExpPRP{F}{B} = 1 \vert b = 1]  \\
-                        & + \frac{1}{2} \times \Pr[\ExpPRP{F}{B} = 1 \vert b = 0] 
-  \end{aligned}
-\end{equation}
-
-If we define adversary~$B$ as (\textrm{???})
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\begin{figure}[t]
-\center
+\begin{figure}[hb]
+\center{}
 \fpage{.7}{
 \hpagess{.6}{.45}
 {
@@ -84,12 +69,26 @@ Ret $E_K(X)$\\
 Ret $F_L(X)$
 }
 }
-\caption{The key-recovery notion for function family $E\colon\bits^{2n}\times\bits^n \to \bits^n$, in the ideal cipher model for some (related) blockcipher~$F$.  In the current problem, $E$ is specifically defined as $E_{K2\concat K1}(X)=F_{K1}(X)\xor K2$, so a single call $\calO(X)$ effectively determines one value of the table for $F_{K1}$, in the lazy-sampling sense. (But \emph{only} for that specific table, not any of the other $F_{K1'}$ tables for $K1' \neq K1$.)}
-\label{fig:eks}
+\caption{The key-recovery notion for function family $E\colon\bits^{2n}\times\bits^n \to \bits^n$, in the ideal cipher model for some (related) blockcipher~$F$.  In the current problem, $E$ is specifically defined as $E_{K2\concat K1}(X)=F_{K1}(X)\xor K2$, so a single call $\calO(X)$ effectively determines one value of the table for $F_{K1}$, in the lazy-sampling sense. (But \emph{only} for that specific table, not any of the other $F_{K1'}$ tables for $K1' \neq K1$.)}\label{fig:eks}
 \end{figure}
 
-\begin{figure}[t]
-\center
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\paragraph{Proof} Let's define a notion where $k = n$, and create a function family 
+$E\colon\bits^{2n}\times\bits^n \to \bits^n$ for some ideal cipher model with some experiment using adversary~$A$ (\figref{fig:eks}).
+We can then create a new notion (\figref{fig:eprp}) as a superset of \figref{fig:eks} for some bit-guessing game with adversary~$B$. The advantage then, of adversary~$B$ would be:
+\begin{equation}
+  \AdvPRP{F}{B} = 2 \times \Pr[\ExpPRP{F}{B} = 1] - 1
+\end{equation}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{figure}[hb]
+\center{}
 \fpage{.7}{
 \hpagess{.6}{.45}
 {
@@ -98,7 +97,7 @@ $b \getsr \bits$ \\
 $L \getsr \bits^{k}$\\
 $V \getsr \bits^{n}$\\
 $ \pi \getsr \mathsf{perm}(n)$\\
-$L' \getsr B^{\calO(\cdot),\mathrm{F_L}(\cdot)}$\\
+$L' \getsr B^{\calO(\cdot),\mathrm{F}(\cdot, \cdot)}$\\
 Ret $[L'=L]$\\
 }
 {
@@ -108,7 +107,7 @@ if $ b = 1 $\\
   else $Y \leftarrow \pi(x) \xor V$\\
 Ret $Y$\\
 
-\oraclev{$\mathrm{F_L}(Y)$}\\
+\oraclev{$\mathrm{F}(L, Y)$}\\
 if $ b = 1 $\\
   then $Y \leftarrow F_L(X)$\\
   else $Y \leftarrow \pi(X)$\\
@@ -117,19 +116,113 @@ Ret $Y$
 }
 \caption{The Bit-Guessing Game notion for function family $E\colon\bits^{k+n}\times\bits^n \to \bits^n$, in the ideal cipher model for some (related) blockcipher~$F$.  
 In the current problem, $E$ is specifically defined as $E_{V\concat L}(X)=F_{L}(X)\xor V$, so a single call $\calO(Y)$ effectively determines one value of the table for $F_{L}$ which may be from a PRP, in the lazy-sampling sense. 
-(But \emph{only} for that specific table, not any of the other $F_{L'}$ tables for $L' \neq L$.)}
-\label{fig:eprp}
+(But \emph{only} for that specific table, not any of the other $F_{L'}$ tables for $L' \neq L$.)}\label{fig:eprp}
 \end{figure}
 
-\begin{figure}[t]
-  \adversaryv{B} \\
-  Run $A$. \\
-  When $A$ querries X: \\
-     $Y \leftarrow O(X)$ \\
-     Ret Y to A
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The $\Pr[\ExpPRP{F}{B} = 1]$ (probability of B winning the game) can then be expanded as:
+\begin{equation}
+  \begin{aligned}
+  \Pr[\ExpPRP{F}{B} = 1] 
+                        & = \Pr(b = 1) \times \Pr[\ExpPRP{F}{B} = 1 \vert b = 1]  \\
+                        & + \Pr(b = 0) \times \Pr[\ExpPRP{F}{B} = 1 \vert b = 0] \\
+                        \\
+                        & = \frac{1}{2} \times \Pr[\ExpPRP{F}{B} = 1 \vert b = 1]  \\
+                        & + \frac{1}{2} \times \Pr[\ExpPRP{F}{B} = 1 \vert b = 0] 
+  \end{aligned}
+\end{equation}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+If we define adversary~$B$'s behavior as (Algorithm~\ref{alg:advb}),
+then $\Pr[\ExpPRP{F}{B} = 1 \vert b = 1]$ can only be true if and only if $b = 1$ and at least as often as 
+adversary~$A$ wins its game ($A^{\mathrm{F_{K_1}}(X) \xor K_2} => K1 \concat K2$).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\algrenewcommand\algorithmicif{\textbf{When}}
+%\algrenewcommand\algorithmicfor{\textbf{Pick}}
+\begin{algorithm}{}
+  \caption{Adversary B}\label{alg:advb}
+\begin{algorithmic}[1]
+  \State{} Run $A$
+  \If{$A$ querries $X$}
+    \State{} $Y \gets \calO(Y)$
+  \EndIf{}
+  \If{$A$ querries $L,X$}
+    \State{} $Y \gets \mathrm{F}(L,Y)$
+  \EndIf{}
+  \If{$A$ Halts with output $K' = k_{2} \concat k_{1}$}
+    \For{$W$ not previously querried}
+      \State{} $U \gets \mathrm{E_{K'}}(W)$
+      \State{} $I \gets \mathrm{F_{k_1}}(W)$
+      \State{} $V \gets \calO(W)$
+      \State{} $Y \gets \mathrm{F}(F_{k_1}, W)$
+      \State{} \Return{} [$U = V$ \AND{} $I = J$]
+    \EndFor{}
+  \EndIf{}
   
-\end{figure}
+\end{algorithmic}
+\end{algorithm}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+The $\Pr[\ExpPRP{F}{B} = 1 \vert b = 1]$ then, would be greater than $\Pr[\ExpKR{E}{A}]$.
+For $\Pr[\ExpPRP{F}{B} = 1 \vert b = 0]$, can be simplified.
+\begin{equation}
+  \begin{aligned}
+    \Pr[\ExpPRP{F}{B} = 1 \vert b = 0] 
+                                    & = 1 - \Pr[\ExpPRP{F}{B} = 0 \vert b = 0] \\
+                                    \\
+    \Pr[\ExpPRP{F}{B} = 1 \vert b = 0] & = 1 - \frac{1}{2^{n}!}
+  \end{aligned}
+\end{equation}
+
+We can simplify $\Pr[\ExpPRP{F}{B} = 0 \vert b = 0]$ by the following theorem:
+
+\begin{theorem}
+  For any fixed $V \in \bits^n$ and any $\pi \in \Perm{n}$, $f(X)=\pi(X) \xor V$ is a permutation; and for any 
+  fixed $V \in \bits^n$ and $\pi'\in \Perm{n}$, when $\pi \getsr \Perm{n}$ we have $\Prob{f=\pi'}=1/(2^n!)$
+\end{theorem}
+
+As $\Pr[\ExpPRP{F}{B} = 0 \vert b = 0]$ will use the PRP, we will simplify it to $\frac{1}{2^{n}!}$. Now, we can combine our equations as:
+
+\begin{equation}
+  \begin{aligned}
+  \Pr[\ExpPRP{F}{B} = 1] 
+                        & = \Pr(b = 1) \times \Pr[\ExpPRP{F}{B} = 1 \vert b = 1]  \\
+                        & + \Pr(b = 0) \times \Pr[\ExpPRP{F}{B} = 1 \vert b = 0] \\
+                        \\
+                        & = \frac{1}{2} \times \Pr[\ExpPRP{F}{B} = 1 \vert b = 1]  \\
+                        & + \frac{1}{2} \times \Pr[\ExpPRP{F}{B} = 1 \vert b = 0] \\
+                        \\
+                        & \geq \frac{1}{2}(\AdvPRP{E}{A}) + \frac{1}{2}(1-\frac{1}{2^{n}!})
+  \end{aligned}
+\end{equation}
+
+Using this in our original equation:
+
+\begin{equation}
+  \begin{aligned}
+    \AdvPRP{F}{B} & = 2 \times \Pr[\ExpPRP{F}{B} = 1] - 1\\
+                  & \geq 2 \times (\frac{1}{2}(\AdvPRP{E}{A}) + \frac{1}{2}(1-\frac{1}{2^{n}!})
+) - 1 \\ 
+                  & \geq \AdvPRP{E}{A} - \frac{1}{2^{n}!} \\
+     \AdvPRP{E}{A} & \leq \AdvPRP{F}{B} + \frac{1}{2^{n}!}
+  \end{aligned}
+\end{equation}
+
+As adversary~$B$ must run at least as long as and only make 2 more queries (Algorithm \ref{alg:advb} line 6) 
+than adversary~$A$, the $t'$ and $q'$ of adversary~$B$ must be $t'=t + `negligable`$ and $q'=q+2$
+
+\paragraph{Question 2} I ran out of time\ldots{}
 
 \end{document}
 
