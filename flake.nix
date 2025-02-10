@@ -11,7 +11,9 @@
       let
         pkgs = import nixpkgs {inherit system; config.allowUnfree = true; };
         tex = pkgs.texlive.combine {
-          inherit (pkgs.texlive) scheme-small latex-bin latexmk texcount setspace url algorithmicx;
+          inherit (pkgs.texlive) scheme-medium latex-bin latexmk texcount setspace url 
+          algorithm2e relsize ifoddpage algpseudocodex algorithmicx fifo-stack varwidth 
+          tabto-ltx tabto-generic totcount tikzmark;
         };
         extensions = nix-vscode-extensions.extensions.${system};
 
